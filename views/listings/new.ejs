@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeStay</title>
+</head>
+<body>
+    <h1>New Listing</h1>
+    <form action="/listings" method="POST">
+        <div class="input-text">
+            <label for="title">Name </label>
+            <input type="text" name="listing[title]" placeholder="Enter title" id="title">
+        </div>
+        <div class="input-text">
+            <label for="description">Description</label>
+            <textarea name="listing[description]" id="description" placeholder="Enter description"></textarea>
+        </div>
+        <div class="input-text">
+            <label for="img">Image URL</label>
+            <input type="text" name="listing[image.url]" id="img" placeholder="Enter image URL/Link">
+        </div>
+        <div class="input-text">
+            <label for="price">Price</label>
+            <input type="number" name="listing[price]" id="price" placeholder="Enter price">
+        </div>
+        <div class="input-text">
+            <label for="location">Location</label>
+            <input type="text" name="listing[location]" id="location" placeholder="Enter location">
+        </div>
+        <div class="input-text">
+            <label for="country">Country</label>
+            <input type="text" name="listing[country]" id="country" placeholder="Enter country">
+        </div>
+        
+        <button type="submit">Add</button>
+    </form>
+
+</body>
+</html>

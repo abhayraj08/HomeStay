@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeStay</title>
+</head>
+<body>
+    <h1>All Listings</h1>
+    <a href="/listings/new">New Listing</a>
+    <ol>
+        <% for(let listing of listings) { %>
+            <li><%= listing.title %> <a href="/listings/<%= listing._id %>">details</a></li>
+        <% } %>
+    </ol>
+</body>
+</html>
