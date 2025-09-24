@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HomeStay</title>
-</head>
+<% layout("/layouts/boilerplate")  %>
 <body>
-    <h1>All Listings</h1>
+    <h2>All Listings</h2>
     <a href="/listings/new">New Listing</a>
     <ol>
         <% for(let listing of listings) { %>
@@ -14,4 +8,3 @@
         <% } %>
     </ol>
 </body>
-</html>

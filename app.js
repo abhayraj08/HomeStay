@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Listing = require('./models/listing');
 const path = require('path');
 const methodOverride = require('method-override');
+const ejsMate = require('ejs-mate');
 
 // Database connection
 const MONGO_URL = 'mongodb://127.0.0.1:27017/HomeStay';
@@ -15,10 +16,12 @@ mongoose.connect(MONGO_URL)
 // Setting ejs
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.engine('ejs', ejsMate);
 
 // Middlewares
 app.use(express.urlencoded({ extended: true })); // To use req.body
 app.use(methodOverride('_method')); // To use PUT & DELETE
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Dummy Routes
