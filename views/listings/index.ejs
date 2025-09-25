@@ -1,7 +1,6 @@
 <% layout("/layouts/boilerplate")  %>
 <body>
     <h2>All Listings</h2>
-    <a href="/listings/new">New Listing</a>
     <ol>
         <% for(let listing of listings) { %>
             <li><%= listing.title %> <a href="/listings/<%= listing._id %>">details</a></li>
