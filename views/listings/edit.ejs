@@ -1,37 +1,43 @@
-<% layout("/layouts/boilerplate")  %>
-<body>
-    <h2>Update Listing</h2>
-    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST">
-        <div class="input-text">
-            <label for="title">Name </label>
-            <input type="text" name="listing[title]" id="title" placeholder="Enter title" value="<%= listing.title %>">
-        </div>
-        <div class="input-text">
-            <label for="description">Description</label>
-            <textarea name="listing[description]" id="description"
-                placeholder="Enter description"><%= listing.description %></textarea>
-        </div>
-        <div class="input-text">
-            <label for="img">Image URL</label>
-            <input type="text" name="listing[image.url]" id="img" placeholder="Enter image URL/Link"
-                value="<%= listing.image.url %>">
-        </div>
-        <div class="input-text">
-            <label for="price">Price</label>
-            <input type="number" name="listing[price]" id="price" placeholder="Enter price"
-                value="<%= listing.price %>">
-        </div>
-        <div class="input-text">
-            <label for="location">Location</label>
-            <input type="text" name="listing[location]" id="location" placeholder="Enter location"
-                value="<%= listing.location %>">
-        </div>
-        <div class="input-text">
-            <label for="country">Country</label>
-            <input type="text" name="listing[country]" id="country" placeholder="Enter country"
-                value="<%= listing.country %>">
-        </div>
+<% layout("/layouts/boilerplate") %>
 
-        <button type="submit">Update</button>
-    </form>
-</body>
+    <div class="row mt-4">
+        <div class="col-8 offset-2">
+            <h2 class="mb-3">Update Listing</h2>
+            <form action="/listings/<%= listing._id %>?_method=PUT" method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Name </label>
+                    <input type="text" class="form-control" name="listing[title]" id="title"
+                        placeholder="Enter name of hotel" value="<%= listing.title %>">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="listing[description]" class="form-control" id="description"
+                        placeholder="Enter description"><%= listing.description %></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="img" class="form-label">Image URL</label>
+                    <input type="text" class="form-control" name="listing[image.url]" id="img"
+                        placeholder="Enter image URL/Link" value="<%= listing.image.url %>">
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" class="form-control" name="listing[price]" id="price"
+                            placeholder="Enter price" value="<%= listing.price %>">
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" class="form-control" name="listing[country]" id="country"
+                            placeholder="Enter country" value="<%= listing.country %>">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" name="listing[location]" id="location"
+                        placeholder="Enter location" value="<%= listing.location %>">
+                </div>
+
+                <button type="submit" class="btn mb-4 edit-btn">Update</button>
+            </form>
+        </div>
+    </div>

@@ -1,6 +1,13 @@
-/* body {
-    background-color: #c4c1e0;
-} */
+body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+}
 
 
 /* Navbar */
@@ -10,7 +17,7 @@
 }
 
 .fa-compass {
-    color: #fe424d;
+    color: #345995;
     font-size: 2rem;
 }
 
@@ -35,7 +42,7 @@
 }
 
 .f-info-brand {
-    margin-bottom: 1rem;
+    margin-bottom: 0.7rem;
 }
 
 .f-info-links a {
@@ -46,4 +53,62 @@
 
 .f-info-links a:hover {
     text-decoration: underline;
+}
+
+
+/* Index Page - Cards */
+.row a {
+    text-decoration: none;
+}
+
+.card {
+    border: none;
+    margin-bottom: 2rem;
+}
+
+.card-img-top {
+    border-radius: 1rem;
+    height: 20rem;
+}
+
+.img:hover {
+    opacity: 0.8;
+}
+
+.card-body {
+    padding: 0;
+}
+
+
+/* New & Edit Pages - Btn*/
+.add-btn, .edit-btn {
+    color: white;
+    background-color: #b0a9eb;
+    border: none;
+}
+
+.add-btn:hover {
+    color: white;
+    background-color: #345995;
+}
+
+.edit-btn:hover {
+    color: white;
+    background-color: #345995;
+}
+
+
+/* Show Page */
+.show-img {
+    height: 45vh;
+}
+
+.delete-btn {
+    color: white;
+    background-color: #ff7881;
+}
+
+.delete-btn:hover {
+    color: white;
+    background-color: red;
 }
