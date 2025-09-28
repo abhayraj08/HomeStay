@@ -3,38 +3,56 @@
     <div class="row mt-4">
         <div class="col-8 offset-2">
             <h2 class="mb-3">Update Listing</h2>
-            <form action="/listings/<%= listing._id %>?_method=PUT" method="POST">
+            <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="title" class="form-label">Name </label>
                     <input type="text" class="form-control" name="listing[title]" id="title"
-                        placeholder="Enter name of hotel" value="<%= listing.title %>">
+                        placeholder="Enter name of hotel" value="<%= listing.title %>" required>
+                    <div class="valid-feedback">
+                        Looks good !!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea name="listing[description]" class="form-control" id="description"
-                        placeholder="Enter description"><%= listing.description %></textarea>
+                    <textarea class="form-control" name="listing[description]" id="description"
+                        placeholder="Enter description" required><%= listing.description %></textarea>
+                    <div class="valid-feedback">
+                        Looks good !!
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="img" class="form-label">Image URL</label>
                     <input type="text" class="form-control" name="listing[image.url]" id="img"
-                        placeholder="Enter image URL/Link" value="<%= listing.image.url %>">
+                        placeholder="Enter image URL/Link" value="<%= listing.image.url %>" required>
+                    <div class="valid-feedback">
+                        Looks good !!
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="price" class="form-label">Price</label>
                         <input type="number" class="form-control" name="listing[price]" id="price"
-                            placeholder="Enter price" value="<%= listing.price %>">
+                            placeholder="Enter price" value="<%= listing.price %>" required>
+                        <div class="valid-feedback">
+                            Looks good !!
+                        </div>
                     </div>
                     <div class="col-md-8 mb-3">
                         <label for="country" class="form-label">Country</label>
                         <input type="text" class="form-control" name="listing[country]" id="country"
-                            placeholder="Enter country" value="<%= listing.country %>">
+                            placeholder="Enter country" value="<%= listing.country %>" required>
+                        <div class="valid-feedback">
+                            Looks good !!
+                        </div>
                     </div>
                 </div>
                 <div class="mb-4">
                     <label for="location" class="form-label">Location</label>
                     <input type="text" class="form-control" name="listing[location]" id="location"
-                        placeholder="Enter location" value="<%= listing.location %>">
+                        placeholder="Enter location" value="<%= listing.location %>" required>
+                    <div class="valid-feedback">
+                        Looks good !!
+                    </div>
                 </div>
 
                 <button type="submit" class="btn mb-4 edit-btn">Update</button>
