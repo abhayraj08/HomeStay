@@ -7,6 +7,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require('./utils/wrapAsync');
 const ExpressError = require('./utils/ExpressError');
+const { listingSchema } = require('./schema');
 
 // Database connection
 const MONGO_URL = 'mongodb://127.0.0.1:27017/HomeStay';
@@ -26,6 +27,17 @@ app.use(methodOverride('_method')); // To use PUT & DELETE
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+// Validating Schema with the help of JOI
+const validateListing = (req, res, next) => {
+    let {error} = listingSchema.validate(req.body || {});
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    } else {
+        next();
+    }
+}
+
 // Dummy Routes
 app.get('/', (req, res) => {
     res.send(`Hello World!! <br> <a href="/listings">listings</a>`);
@@ -43,10 +55,7 @@ app.get('/listings/new', (req, res) => {
 })
 
 // New Route (sending the data to db)
-app.post('/listings', wrapAsync(async (req, res, next) => {
-    if(!req.body || !req.body.listing) {
-        throw new ExpressError(400, "Send valid data for listing");
-    }
+app.post('/listings', validateListing, wrapAsync(async (req, res) => {
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect('/listings');
@@ -55,7 +64,7 @@ app.post('/listings', wrapAsync(async (req, res, next) => {
 // Show Routes
 app.get('/listings/:id', wrapAsync(async (req, res) => {
     const listing = await Listing.findById(req.params.id);
-    if(!listing) {
+    if (!listing) {
         throw new ExpressError(400, "No such data in listing");
     }
     res.render('listings/show', { listing });
@@ -68,7 +77,7 @@ app.get('/listings/:id/edit', wrapAsync(async (req, res) => {
 }))
 
 // Update Routes (sending updated data to db)
-app.put('/listings/:id', wrapAsync(async (req, res) => {
+app.put('/listings/:id', validateListing, wrapAsync(async (req, res) => {
     const { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listing });
     res.redirect(`/listings/${id}`);
@@ -104,9 +113,9 @@ app.all(/.*/, (req, res, next) => {
 
 // Global error-handling middleware
 app.use((err, req, res, next) => {
-    let {statusCode = 500, message = "Something went wrong"} = err;
+    let { statusCode = 500, message = "Something went wrong" } = err;
     // res.status(statusCode).send(message);
-    res.status(statusCode).render('error', {message});
+    res.status(statusCode).render('error', { message });
 })
 
 // Starting the Server
