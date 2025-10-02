@@ -2,12 +2,13 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const Listing = require('./models/listing');
+const Review = require('./models/review');
 const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require('./utils/wrapAsync');
 const ExpressError = require('./utils/ExpressError');
-const { listingSchema } = require('./schema');
+const { listingSchema, reviewSchema } = require('./schema');
 
 // Database connection
 const MONGO_URL = 'mongodb://127.0.0.1:27017/HomeStay';
@@ -27,7 +28,7 @@ app.use(methodOverride('_method')); // To use PUT & DELETE
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-// Validating Schema with the help of JOI
+// Validating Listing Schema with the help of JOI (server side validation)
 const validateListing = (req, res, next) => {
     let {error} = listingSchema.validate(req.body || {});
     if (error) {
@@ -38,7 +39,18 @@ const validateListing = (req, res, next) => {
     }
 }
 
-// Dummy Routes
+// Validating Review Schema with the help of JOI (server side validation)
+const validateReview = (req, res, next) => {
+    let {error} = reviewSchema.validate(req.body || {});
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    } else {
+        next();
+    }
+}
+
+// Dummy Route
 app.get('/', (req, res) => {
     res.send(`Hello World!! <br> <a href="/listings">listings</a>`);
 })
@@ -61,34 +73,59 @@ app.post('/listings', validateListing, wrapAsync(async (req, res) => {
     res.redirect('/listings');
 }))
 
-// Show Routes
+// Show Route
 app.get('/listings/:id', wrapAsync(async (req, res) => {
-    const listing = await Listing.findById(req.params.id);
+    const listing = await Listing.findById(req.params.id).populate("reviews");
     if (!listing) {
         throw new ExpressError(400, "No such data in listing");
     }
     res.render('listings/show', { listing });
 }))
 
-// Update Routes (getting the form)
+// Update Route (getting the form)
 app.get('/listings/:id/edit', wrapAsync(async (req, res) => {
     const listing = await Listing.findById(req.params.id);
     res.render('listings/edit', { listing })
 }))
 
-// Update Routes (sending updated data to db)
+// Update Route (sending updated data to db)
 app.put('/listings/:id', validateListing, wrapAsync(async (req, res) => {
     const { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listing });
     res.redirect(`/listings/${id}`);
 }))
 
-// Delete Routes 
+// Delete Route
 app.delete('/listings/:id', wrapAsync(async (req, res) => {
     await Listing.findByIdAndDelete(req.params.id);
     res.redirect('/listingS');
 }))
 
+
+// Reviews
+// New Route (sending the data to db)
+app.post('/listings/:id/reviews', validateReview, wrapAsync(async (req, res) => {
+    const {id} = req.params;
+    let listing = await Listing.findById(id);
+    const newReview = new Review(req.body.review);
+
+    listing.reviews.push(newReview);
+    
+    await newReview.save();
+    await listing.save();
+
+    res.redirect(`/listings/${id}`);
+}));
+
+// Delete Route 
+app.delete('/listings/:id/reviews/:reviewId', wrapAsync(async (req, res) => {
+    const {id, reviewId} = req.params;
+
+    await Listing.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+
+    res.redirect(`/listings/${id}`);
+}))
 
 
 
