@@ -5,6 +5,7 @@ const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError');
+const session = require('express-session');
 
 // Requiring Routes
 const listingRoutes = require('./routes/listing');
@@ -26,6 +27,19 @@ app.engine('ejs', ejsMate);
 app.use(express.urlencoded({ extended: true })); // To use req.body
 app.use(methodOverride('_method')); // To use PUT & DELETE
 app.use(express.static(path.join(__dirname, 'public')));
+
+// session configuration
+const sessionOptions = {
+    secret: "thisisnotagoodsecret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7*24*60*60*1000,
+        maxAge: 7*24*60*60*1000,
+        httpOnly: true,
+    }
+}
+app.use(session(sessionOptions));
 
 
 
