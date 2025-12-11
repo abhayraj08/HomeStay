@@ -35,6 +35,7 @@ router.get('/new', (req, res) => {
 router.post('/', validateListing, wrapAsync(async (req, res) => {
     const newListing = new Listing(req.body.listing);
     await newListing.save();
+    req.flash('success', 'New Listing Created!');
     res.redirect('/listings');
 }))
 
@@ -42,7 +43,8 @@ router.post('/', validateListing, wrapAsync(async (req, res) => {
 router.get('/:id', wrapAsync(async (req, res) => {
     const listing = await Listing.findById(req.params.id).populate("reviews");
     if (!listing) {
-        throw new ExpressError(400, "No such data in listing");
+        req.flash("error", "No such listing exists");
+        return res.redirect('/listings');
     }
     res.render('listings/show', { listing });
 }))
@@ -50,6 +52,10 @@ router.get('/:id', wrapAsync(async (req, res) => {
 // Update Route (getting the form)
 router.get('/:id/edit', wrapAsync(async (req, res) => {
     const listing = await Listing.findById(req.params.id);
+    if (!listing) {
+        req.flash("error", "No such listing exists");
+        return res.redirect('/listings');
+    }
     res.render('listings/edit', { listing })
 }))
 
@@ -57,13 +63,15 @@ router.get('/:id/edit', wrapAsync(async (req, res) => {
 router.put('/:id', validateListing, wrapAsync(async (req, res) => {
     const { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+    req.flash('success', 'Listing Updated!');
     res.redirect(`/listings/${id}`);
 }))
 
 // Delete Route
 router.delete('/:id', wrapAsync(async (req, res) => {
     await Listing.findByIdAndDelete(req.params.id);
-    res.redirect('/listingS');
+    req.flash('success', 'Listing Deleted!');
+    res.redirect('/listings');
 }))
 
 module.exports = router;
