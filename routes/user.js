@@ -15,7 +15,6 @@ router.post('/signup', wrapAsync(async (req, res) => {
         const newUser = await new User({ email, username });
         const registerUser = await User.register(newUser, password);
         req.flash("success", "Welcome to HomeStay!");
-        console.log(newUser);
         console.log(registerUser);
         res.redirect('/listings');
     } catch(e) {
