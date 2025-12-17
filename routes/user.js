@@ -9,14 +9,18 @@ router.get('/signup', (req, res) => {
     res.render('users/signup');
 });
 
-router.post('/signup', wrapAsync(async (req, res) => {
+router.post('/signup', wrapAsync(async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
         const newUser = await new User({ email, username });
         const registerUser = await User.register(newUser, password);
-        req.flash("success", "Welcome to HomeStay!");
-        console.log(registerUser);
-        res.redirect('/listings');
+        req.login(registerUser, (err) => {
+            if(err) {
+                return next(err);
+            }
+            req.flash("success", "Welcome to HomeStay!");
+            res.redirect('/listings');
+        })
     } catch(e) {
         req.flash("error", e.message);
         res.redirect('/signup');
