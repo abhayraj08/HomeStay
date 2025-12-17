@@ -7,10 +7,14 @@ const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require("passport");
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
 // Requiring Routes
 const listingRoutes = require('./routes/listing');
 const reviewRoutes = require('./routes/review');
+const userRoutes = require('./routes/user');
 
 // Database connection
 const MONGO_URL = 'mongodb://127.0.0.1:27017/HomeStay';
@@ -43,6 +47,18 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+// passport middleware
+app.use(passport.initialize());
+app.use(passport.session());     
+
+// strategy
+passport.use(new LocalStrategy(User.authenticate()));
+
+// serialize & deserialize user
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
 // flash middleware
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
@@ -57,11 +73,26 @@ app.get('/', (req, res) => {
     res.send(`Hello World!! <br> <a href="/listings">listings</a>`);
 })
 
+// Dummy Routes for password
+// app.get('/demouser', async (req, res) => {
+//     let testuser = new User ({
+//         email: "spydii@gmail.com",
+//         username: "spydii"
+//     });
+
+//     let registeredUser = await User.register(testuser, "helloworld");
+//     res.send(registeredUser);
+// })
+
+
 // Listings Routes
 app.use('/listings', listingRoutes);
 
 // Reviews Routes
 app.use('/listings/:id/reviews', reviewRoutes);
+
+// User Routes
+app.use('/', userRoutes);
 
 
 
