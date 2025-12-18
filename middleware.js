@@ -1,4 +1,5 @@
 const Listing = require('./models/listing');
+const Review = require('./models/review');
 const { listingSchema, reviewSchema } = require('./schema');
 const ExpressError = require('./utils/ExpressError');
 
@@ -15,7 +16,7 @@ module.exports.validateListing = (req, res, next) => {
 
 // Validating Review Schema with the help of JOI (server side validation)
 module.exports.validateReview = (req, res, next) => {
-    let {error} = reviewSchema.validate(req.body || {});
+    let { error } = reviewSchema.validate(req.body || {});
     if (error) {
         let errMsg = error.details.map((el) => el.message).join(",");
         throw new ExpressError(400, errMsg);
@@ -46,6 +47,17 @@ module.exports.isOwner = async (req, res, next) => {
     const listing = await Listing.findById(id);
     if (!listing.owner.equals(res.locals.currUser._id)) {
         req.flash("error", "You are not the owner of this listing");
+        return res.redirect(`/listings/${id}`);
+    };
+
+    next();
+};
+
+module.exports.isReviewAuthor = async (req, res, next) => {
+    const { id, reviewId } = req.params;
+    const review = await Review.findById(reviewId);
+    if (!review.author.equals(res.locals.currUser._id)) {
+        req.flash("error", "You are not the author of this review");
         return res.redirect(`/listings/${id}`);
     };
 

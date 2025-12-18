@@ -26,19 +26,21 @@
 
 
             <!-- Review Form -->
-            <h4>Leave a Review</h4>
-            <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation" novalidate>
-                <div>
-                    <label for="rating" class="form-label">Rating</label>
-                    <input type="range" class="form-range" min="1" max="5" id="rating" name="review[rating]">
-                </div>
-                <div>
-                    <label for="comment" class="form-label">Comments</label>
-                    <textarea class="form-control" id="comment" rows="5" name="review[comment]" required></textarea>
-                    <div class="invalid-feedback">Please add some comments for review</div>
-                </div>
-                <button class="btn btn-outline-dark mt-3">Submit</button>
-            </form>
+            <% if (currUser) { %>
+                <h4>Leave a Review</h4>
+                <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation" novalidate>
+                    <div>
+                        <label for="rating" class="form-label">Rating</label>
+                        <input type="range" class="form-range" min="1" max="5" id="rating" name="review[rating]">
+                    </div>
+                    <div>
+                        <label for="comment" class="form-label">Comments</label>
+                        <textarea class="form-control" id="comment" rows="5" name="review[comment]" required></textarea>
+                        <div class="invalid-feedback">Please add some comments for review</div>
+                    </div>
+                    <button class="btn btn-outline-dark mt-3">Submit</button>
+                </form>
+            <% } %>
                 
             <!-- Review Showing -->
             <div class="row">
@@ -46,9 +48,9 @@
                 <% for( let review of listing.reviews ) { %>
                 <div class="card col-5 mx-3 mb-3 p-3">
                     <div class="card-body">
-                        <h5 class="card-text">John Doe</h5>
-                        <p class="card-text mb-0">Comment: <%= review.comment %></p>
-                        <p class="card-text mb-3">Rating: <%= review.rating %> stars</p>
+                        <h5 class="card-text"> <%= review.author.username %></h5>
+                        <p class="card-text mb-0"><%= review.comment %></p>
+                        <p class="card-text mb-3"><%= review.rating %> stars</p>
                     </div>
                     <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
                         <button class="btn btn-sm delete-btn">Delete</button>

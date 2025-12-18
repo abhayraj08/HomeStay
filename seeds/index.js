@@ -11,7 +11,7 @@ mongoose.connect(MONGO_URL)
 // seeding the dummy data into database
 const seedDB = async () => {
     await Listing.deleteMany({});
-    seedData.data = seedData.data.map((obj) => ({...obj, owner: '693d66d30db8b4507510e861'}));
+    seedData.data = seedData.data.map((obj) => ({...obj, owner: '6943c7a6a5d9a1e05c79e883'}));
     await Listing.insertMany(seedData.data);
     console.log("Data was seeded !!");
 }
