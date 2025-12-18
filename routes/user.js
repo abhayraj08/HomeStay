@@ -4,33 +4,14 @@ const User = require('../models/user');
 const wrapAsync = require('../utils/wrapAsync');
 const passport = require('passport');
 const { saveRedirectUrl } = require('../middleware');
+const {renderSignupForm, signup, login, logout, renderLoginForm,  } = require('../controllers/user');
 
 
-router.get('/signup', (req, res) => {
-    res.render('users/signup');
-});
+router.get('/signup', renderSignupForm);
 
-router.post('/signup', wrapAsync(async (req, res, next) => {
-    try {
-        const { username, email, password } = req.body;
-        const newUser = await new User({ email, username });
-        const registerUser = await User.register(newUser, password);
-        req.login(registerUser, (err) => {
-            if(err) {
-                return next(err);
-            }
-            req.flash("success", "Welcome to HomeStay!");
-            res.redirect('/listings');
-        })
-    } catch(e) {
-        req.flash("error", e.message);
-        res.redirect('/signup');
-    }
-}))
+router.post('/signup', wrapAsync(signup));
 
-router.get('/login', (req, res) => {
-    res.render('users/login');
-})
+router.get('/login', renderLoginForm);
 
 router.post('/login',
     saveRedirectUrl,
@@ -38,21 +19,9 @@ router.post('/login',
         failureRedirect: '/login', 
         failureFlash: true
     }), 
-    async (req, res) => {
-        req.flash("success", "Welcome back to HomeStay!");
-        let redirectUrl = res.locals.redirectUrl || '/listings';
-        res.redirect(redirectUrl);
-    }
+    login
 )
 
-router.get('/logout', (req, res, next) => {
-    req.logout((err) => {
-        if(err) {
-            return next(err);
-        } 
-        req.flash("success", "You are logged out!!");
-        res.redirect('/listings');
-    })
-})
+router.get('/logout', logout);
 
 module.exports = router;

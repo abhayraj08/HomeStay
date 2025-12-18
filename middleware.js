@@ -28,6 +28,8 @@ module.exports.validateReview = (req, res, next) => {
 module.exports.isLoggedIn = (req, res, next) => {
     // console.log(req.user);
     if (!req.isAuthenticated()) {
+        // console.log("reqOriginal = ",req.originalUrl);
+        // console.log("reqParsedUrl = ",req._parsedUrl);
         req.session.redirectUrl = req.originalUrl;
         req.flash("error", "You must be logged in to create listing!");
         return res.redirect('/login');
