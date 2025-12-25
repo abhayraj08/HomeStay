@@ -101,6 +101,7 @@ body {
 /* Show Page */
 .show-img {
     height: 45vh;
+    width: 70%;
 }
 
 .delete-btn {
@@ -111,4 +112,10 @@ body {
 .delete-btn:hover {
     color: white;
     background-color: red;
+}
+
+/* Map - Show Page */
+#map {
+    height: 400px;
+    width: 100%;
 }

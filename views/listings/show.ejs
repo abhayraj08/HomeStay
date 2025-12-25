@@ -58,25 +58,37 @@
             <% } %>
                 
             <!-- Review Showing -->
-            <div class="row">
-                <h4 class="mt-4">All Reviews</h4>
-                <% for( let review of listing.reviews ) { %>
-                <div class="card col-5 mx-3 mb-3 p-3">
-                    <div class="card-body">
-                        <h5 class="card-text"> <%= review.author.username %></h5>
-                        <p class="starability-result card-text" data-rating="<%= review.rating %>" ></p>
-                        <p class="card-text mb-0"><%= review.comment %></p>
+            <% if (listing.reviews.length > 0) { %>
+                <div class="row">
+                    <h4 class="mt-4">All Reviews</h4>
+                    <% for( let review of listing.reviews ) { %>
+                    <div class="card col-5 mx-3 mb-3 p-3">
+                        <div class="card-body">
+                            <h5 class="card-text"> <%= review.author.username %></h5>
+                            <p class="starability-result card-text" data-rating="<%= review.rating %>" ></p>
+                            <p class="card-text mb-0"><%= review.comment %></p>
+                        </div>
+                        
+                        <% if (currUser && currUser._id.equals(review.author._id)) { %>
+                            <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                                <button class="btn btn-sm delete-btn">Delete</button>
+                            </form>
+                        <% } %>
                     </div>
-                    
-                    <% if (currUser && currUser._id.equals(review.author._id)) { %>
-                        <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
-                            <button class="btn btn-sm delete-btn">Delete</button>
-                        </form>
                     <% } %>
                 </div>
-                <% } %>
-            </div>
+            <% } %>
             
+            <!-- Display a Map -->
+            <div class="my-4">
+                <h3>Where you'll be</h3>
+                <div id="map"></div>
+            </div>
         </div>
     </div>
+
+    <script>
+        const mapToken = "<%= process.env.MAPBOX_TOKEN %>";
+    </script>
+    <script src="/js/map.js"></script>
     
