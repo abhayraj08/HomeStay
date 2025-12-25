@@ -23,9 +23,14 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createNewListing = async (req, res) => {
+    // console.log(req.file)
+    const url = req.file.path;
+    const filename = req.file.filename;
+    
     const newListing = new Listing(req.body.listing);
     newListing.owner = req.user._id;
-    await newListing.save();
+    newListing.image = {url, filename};      // adding cloudinary url and filename to listing 
+    await newListing.save();                 // saving to mongo database
     req.flash('success', 'New Listing Created!');
     res.redirect('/listings');
 }

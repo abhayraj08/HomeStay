@@ -10,11 +10,22 @@ const { index,
     renderUpdateForm, updateListing,
     deleteListing } = require('../controllers/listing');
 
+// Multer is a node.js middleware for handling multipart/form-data, which
+// is primarily used for uploading files.
+const multer = require('multer');
+const { storage } = require('../cloudConfig');
+const upload = multer({ storage });    // multer use cloudinary storage to store img
+
     
 router
     .route('/')
     .get(wrapAsync(index))
-    .post(isLoggedIn, validateListing, wrapAsync(createNewListing))
+    .post(
+        isLoggedIn,
+        upload.single('image'),
+        validateListing,
+        wrapAsync(createNewListing)
+    )
 
 router.get('/new', isLoggedIn, renderNewForm);
 
