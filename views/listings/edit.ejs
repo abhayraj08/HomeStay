@@ -3,7 +3,10 @@
     <div class="row mt-4">
         <div class="col-8 offset-2">
             <h2 class="mb-3">Update Listing</h2>
-            <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
+            <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" class="needs-validation" 
+                novalidate enctype="multipart/form-data">
+
+                <!-- Name -->
                 <div class="mb-3">
                     <label for="title" class="form-label">Name </label>
                     <input type="text" class="form-control" name="listing[title]" id="title"
@@ -12,6 +15,8 @@
                         Looks good !!
                     </div>
                 </div>
+
+                <!-- Description -->
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
                     <textarea class="form-control" name="listing[description]" id="description"
@@ -20,15 +25,21 @@
                         Looks good !!
                     </div>
                 </div>
+
+                <!-- Image -->
                 <div class="mb-3">
-                    <label for="img" class="form-label">Image URL</label>
-                    <input type="text" class="form-control" name="listing[image][url]" id="img"
-                        placeholder="Enter image URL/Link" value="<%= listing.image.url %>" required>
+                    <img src="<%= originalImageUrl %>" alt="No img">
+                </div>
+                <div class="mb-3">
+                    <label for="img" class="form-label">Upload New Image</label>
+                    <input type="file" class="form-control" name="image" id="img">
                     <div class="valid-feedback">
                         Looks good !!
                     </div>
                 </div>
+            
                 <div class="row">
+                    <!-- Price -->
                     <div class="col-md-4 mb-3">
                         <label for="price" class="form-label">Price</label>
                         <input type="number" class="form-control" name="listing[price]" id="price"
@@ -37,6 +48,8 @@
                             Looks good !!
                         </div>
                     </div>
+
+                    <!-- Country -->
                     <div class="col-md-8 mb-3">
                         <label for="country" class="form-label">Country</label>
                         <input type="text" class="form-control" name="listing[country]" id="country"
@@ -46,6 +59,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Location -->
                 <div class="mb-4">
                     <label for="location" class="form-label">Location</label>
                     <input type="text" class="form-control" name="listing[location]" id="location"
