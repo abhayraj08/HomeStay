@@ -75,7 +75,7 @@ app.use((req, res, next) => {
 
 // Dummy Route
 app.get('/', (req, res) => {
-    res.send(`Hello World!! <br> <a href="/listings">listings</a>`);
+    res.redirect('/listings')
 })
 
 // Dummy Routes for password
