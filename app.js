@@ -10,6 +10,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError');
 const session = require('express-session');
+const { default: MongoStore } = require('connect-mongo');
 const flash = require('connect-flash');
 const passport = require("passport");
 const LocalStrategy = require('passport-local');
@@ -21,7 +22,8 @@ const reviewRoutes = require('./routes/review');
 const userRoutes = require('./routes/user');
 
 // Database connection
-const MONGO_URL = 'mongodb://127.0.0.1:27017/HomeStay';
+// const MONGO_URL = 'mongodb://127.0.0.1:27017/HomeStay'; //Local database
+const MONGO_URL = process.env.DB_URL;  //Cloud database
 mongoose.connect(MONGO_URL)
     .then(() => console.log('Database is connected'))
     .catch((e) => console.log('Error', e))
@@ -37,8 +39,21 @@ app.use(express.urlencoded({ extended: true })); // To use req.body
 app.use(methodOverride('_method')); // To use PUT & DELETE
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Mongo session configuration
+const store = MongoStore.create({
+    mongoUrl: MONGO_URL,
+    crypto: {
+        secret: "thisisnotagoodsecret",
+    },
+    touchAfter: 24 * 3600
+})
+store.on('error', () => {
+    console.log('Error in Mongo session store', err);
+})
+
 // session configuration
 const sessionOptions = {
+    store,
     secret: "thisisnotagoodsecret",
     resave: false,
     saveUninitialized: true,
